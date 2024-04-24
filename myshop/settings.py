@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_dramatiq',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig'
+    'orders.apps.OrdersConfig',
+    'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -70,8 +72,29 @@ TEMPLATES = [
         },
     },
 ]
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
+    "OPTIONS": {
+        "url": "amqp://localhost:5672",
+    },
+    "MIDDLEWARE": [
+        "dramatiq.middleware.Prometheus",
+        "dramatiq.middleware.AgeLimit",
+        "dramatiq.middleware.TimeLimit",
+        "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Retries",
+        "django_dramatiq.middleware.DbConnectionsMiddleware",
+        "django_dramatiq.middleware.AdminMiddleware",
+    ]
+}
+# Defines which database should be used to persist Task objects when the
+# AdminMiddleware is enabled.  The default value is "default".
+DRAMATIQ_TASKS_DATABASE = "default"
+DRAMATIQ_AUTODISCOVER_MODULES = ["tasks", "services"]
 
 WSGI_APPLICATION = 'myshop.wsgi.application'
+
+
 
 
 # Database
@@ -130,3 +153,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Stripe settings
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51P8rc6H3V9ND2lcXFtN7CZoyoh8PqtjyqEKmV3vWHGjfzfezDwmP6grtaQGnvA1I8zqbobnuqgtPwa9RO3n4YiVu00czhK99JV' # Publishable key
+STRIPE_SECRET_KEY = 'sk_test_51P8rc6H3V9ND2lcX23JxkirdCOgMlntONj1WEBMTnBbzsPhUgZDhMG8wWiEooT40MA28yyY57T4BMZy2Wbg6sXhM00KMatUAyW' # Secret key
+STRIPE_API_VERSION = '2022-08-01'
+STRIPE_WEBHOOK_SECRET = 'whsec_773d53398de42143c8a57ff576a2a993ca94772a8cf2a29fef44c28a757933d5'

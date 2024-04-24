@@ -1,8 +1,8 @@
-from celery import shared_task
 from django.core.mail import send_mail
 from .models import Order
+import dramatiq
 
-@shared_task
+@dramatiq.actor
 def order_created(order_id):
     """
     Task to send an e-mail notification when an order is
