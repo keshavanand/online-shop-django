@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
-    'payment.apps.PaymentConfig'
+    'payment.apps.PaymentConfig',
+    'coupons.apps.CouponsConfig'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ DRAMATIQ_BROKER = {
 # Defines which database should be used to persist Task objects when the
 # AdminMiddleware is enabled.  The default value is "default".
 DRAMATIQ_TASKS_DATABASE = "default"
-DRAMATIQ_AUTODISCOVER_MODULES = ["tasks", "services"]
+DRAMATIQ_AUTODISCOVER_MODULES = ["tasks", "orders.tasks", "services"]
 
 WSGI_APPLICATION = 'myshop.wsgi.application'
 
@@ -138,7 +139,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email server configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'keshavanandsingh89@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -156,7 +162,8 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Stripe settings
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51P8rc6H3V9ND2lcXFtN7CZoyoh8PqtjyqEKmV3vWHGjfzfezDwmP6grtaQGnvA1I8zqbobnuqgtPwa9RO3n4YiVu00czhK99JV' # Publishable key
-STRIPE_SECRET_KEY = 'sk_test_51P8rc6H3V9ND2lcX23JxkirdCOgMlntONj1WEBMTnBbzsPhUgZDhMG8wWiEooT40MA28yyY57T4BMZy2Wbg6sXhM00KMatUAyW' # Secret key
+STRIPE_PUBLISHABLE_KEY = '' # Publishable key
+STRIPE_SECRET_KEY = '' # Secret key
 STRIPE_API_VERSION = '2022-08-01'
-STRIPE_WEBHOOK_SECRET = 'whsec_773d53398de42143c8a57ff576a2a993ca94772a8cf2a29fef44c28a757933d5'
+STRIPE_WEBHOOK_SECRET = ''
+
